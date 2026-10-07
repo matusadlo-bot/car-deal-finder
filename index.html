@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="sk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>Deal & Hidden Gem Finder</title>
+  <style>
+    :root{--bg:#0b0f14;--panel:#111722;--panel2:#171f2c;--line:#263142;--text:#edf4ff;--muted:#91a0b6;--accent:#ff6b35;--green:#36d399;--blue:#60a5fa;--red:#fb7185;--gold:#facc15}
+    *{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#080c11,#0d131c 70%);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    a{color:#8bc3ff;text-decoration:none}.wrap{max-width:1500px;margin:auto;padding:22px}.top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;flex-wrap:wrap}
+    h1{font-size:30px;margin:0 0 5px}.sub{color:var(--muted)}.pill{padding:7px 10px;border:1px solid var(--line);border-radius:999px;color:var(--muted);background:#0d131d}
+    .kpis{display:grid;grid-template-columns:repeat(5,minmax(130px,1fr));gap:12px;margin:20px 0}.kpi,.card,.filters,.status{background:rgba(17,23,34,.94);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 30px #0004}
+    .kpi{padding:15px}.kpi .n{font-size:27px;font-weight:800}.kpi .l{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 14px}.tab{border:1px solid var(--line);background:#111722;color:var(--text);padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700}.tab.active{background:var(--accent);border-color:var(--accent);color:white}
+    .filters{padding:14px;margin-bottom:14px}.grid{display:grid;grid-template-columns:repeat(7,minmax(120px,1fr));gap:10px}.field label{display:block;color:var(--muted);font-size:12px;margin-bottom:5px}.field input,.field select{width:100%;padding:9px 10px;background:#0c121b;border:1px solid var(--line);border-radius:8px;color:var(--text);outline:none}.field input:focus,.field select:focus{border-color:#5271a8}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.card{padding:15px;position:relative;overflow:hidden}.score{position:absolute;right:13px;top:13px;border-radius:9px;padding:7px 8px;font-weight:900;background:#202b3b}.title{font-weight:800;font-size:17px;padding-right:62px;min-height:48px}.price{font-size:23px;font-weight:900;margin-top:8px}.meta{display:flex;gap:8px;flex-wrap:wrap;color:var(--muted);margin:8px 0}.chip{background:#0b1119;border:1px solid #253247;border-radius:999px;padding:3px 7px}.reason{color:#c7d2e3;min-height:42px;margin:9px 0}.row{display:flex;gap:8px;align-items:center;justify-content:space-between}.btn{display:inline-block;padding:8px 11px;background:#20304a;border:1px solid #365078;border-radius:8px;color:white;font-weight:700}.btn:hover{background:#294064}
+    .tableWrap{margin-top:15px;overflow:auto;border:1px solid var(--line);border-radius:12px}.tbl{width:100%;border-collapse:collapse;min-width:1100px;background:#0f151f}.tbl th,.tbl td{padding:9px 10px;border-bottom:1px solid #1e2938;text-align:left;white-space:nowrap}.tbl th{position:sticky;top:0;background:#151d29;color:#aab7c9;font-size:12px}.tbl tr:hover{background:#141e2b}.dim{color:var(--muted)}
+    .empty{padding:30px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px}.status{padding:14px;margin-top:18px}.statusGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.source{padding:9px;border-radius:8px;background:#0d131c;border:1px solid #222f41}.ok{color:var(--green)}.bad{color:var(--red)}
+    .warn{background:#241d0c;border:1px solid #58490e;color:#f8d66d;padding:10px 12px;border-radius:10px;margin:10px 0}.hidden{display:none}
+    @media(max-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}.cards{grid-template-columns:repeat(2,1fr)}.kpis{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:700px){.wrap{padding:12px}.grid{grid-template-columns:repeat(2,1fr)}.cards{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}h1{font-size:24px}.statusGrid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div><h1>🔎 Deal & Hidden Gem Finder</h1><div class="sub">Menej výsledkov, ale silnejšie kúsky. Dealy potrebujú reálne porovnateľné autá; rare potrebuje konkrétny dôkaz.</div></div>
+    <div class="pill" id="updated">Načítavam dáta…</div>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="l">Databáza áut</div><div class="n" id="kCars">—</div></div>
+    <div class="kpi"><div class="l">🔥 Dealy</div><div class="n" id="kDeals">—</div></div>
+    <div class="kpi"><div class="l">💎 WOW / Rare</div><div class="n" id="kWow">—</div></div>
+    <div class="kpi"><div class="l">🛠 Oprava</div><div class="n" id="kRepair">—</div></div>
+    <div class="kpi"><div class="l">🪚 Píly</div><div class="n" id="kSaw">—</div></div>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-tab="deals">🔥 Skutočné dealy</button>
+    <button class="tab" data-tab="wow">💎 Autá, z ktorých odpadneš</button>
+    <button class="tab" data-tab="repairs">🛠 Opraviteľné autá</button>
+    <button class="tab" data-tab="cars">⭐ Všetky silné nálezy</button>
+    <button class="tab" data-tab="chainsaws">🪚 Pokazené motorové píly</button>
+  </div>
+
+  <div class="filters">
+    <div class="grid">
+      <div class="field"><label>Hľadať</label><input id="q" placeholder="V12, cabrio, Stihl…"></div>
+      <div class="field"><label>Zdroj</label><select id="source"><option value="">Všetky</option></select></div>
+      <div class="field"><label>Cena od €</label><input id="pmin" type="number" min="0" step="500" placeholder="0"></div>
+      <div class="field"><label>Cena do €</label><input id="pmax" type="number" min="0" step="500" placeholder="bez limitu"></div>
+      <div class="field carOnly"><label>km od</label><input id="kmmin" type="number" min="0" step="5000" placeholder="0"></div>
+      <div class="field carOnly"><label>km do</label><input id="kmmax" type="number" min="0" step="5000" placeholder="bez limitu"></div>
+      <div class="field"><label>Videnia do</label><input id="vmax" type="number" min="0" step="10" placeholder="bez limitu"></div>
+    </div>
+  </div>
+
+  <div id="summary" class="sub" style="margin:0 0 10px"></div>
+  <div class="cards" id="cards"></div>
+  <div class="tableWrap"><table class="tbl"><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
+
+  <div class="status">
+    <b>Stav zdrojov</b><div class="sub">Ak niektorý portál zmení HTML alebo blokuje cloudové IP, uvidíš to tu namiesto tichého zlyhania.</div>
+    <div class="statusGrid" id="statusGrid" style="margin-top:10px"></div>
+  </div>
+</div>
+<script>
+const sourceNames={bazos_sk:'Bazoš SK',bazos_cz:'Bazoš CZ',autobazar_eu:'Autobazar.EU',otomoto_pl:'OTOMOTO PL',hasznaltauto_hu:'Használtautó HU',willhaben_at:'willhaben AT',autoscout24_at:'AutoScout24 AT',mobile_de:'mobile.de',chainsaw_bazos_sk:'Bazoš SK – píly',chainsaw_bazos_cz:'Bazoš CZ – píly'};
+let DATA=null, active='deals';
+const $=id=>document.getElementById(id);
+const num=v=>v===null||v===undefined||v===''?null:Number(v);
+const money=v=>num(v)===null?'—':Math.round(Number(v)).toLocaleString('sk-SK')+' €';
+const nfmt=v=>num(v)===null?'—':Math.round(Number(v)).toLocaleString('sk-SK');
+const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+const when=s=>{if(!s)return '—';const d=new Date(s);return isNaN(d)?s:d.toLocaleString('sk-SK',{dateStyle:'short',timeStyle:'short'})};
+function arr(){return DATA?.[active]||[]}
+function reason(x){return x.interesting_reason||x.rare_reason||x.repair_reason||x.ai_note||'Silný kandidát podľa aktuálneho scoringu.'}
+function score(x){if(active==='deals')return x.deal_score||0;if(active==='wow')return x.rare_score||0;if(active==='repairs')return x.repair_score||0;if(active==='chainsaws')return x.opportunity_score||0;return x.interesting_score||0}
+function filtered(){let a=[...arr()];const q=$('q').value.trim().toLowerCase(),src=$('source').value,pmin=num($('pmin').value),pmax=num($('pmax').value),kmmin=num($('kmmin').value),kmmax=num($('kmmax').value),vmax=num($('vmax').value);
+  return a.filter(x=>{const blob=[x.title,x.make,x.model,x.brand,x.engine_signature,x.variant_signature,x.location,x.rare_reason,x.repair_reason,x.ai_note].join(' ').toLowerCase();if(q&&!blob.includes(q))return false;if(src&&x.source!==src)return false;const p=num(x.price_eur);if(pmin!==null&&p!==null&&p<pmin)return false;if(pmax!==null&&p!==null&&p>pmax)return false;if(active!=='chainsaws'){const km=num(x.mileage_km);if(kmmin!==null&&km!==null&&km<kmmin)return false;if(kmmax!==null&&km!==null&&km>kmmax)return false;}const v=num(x.views);if(vmax!==null&&v!==null&&v>vmax)return false;return true;}).sort((a,b)=>score(b)-score(a));
+}
+function render(){if(!DATA)return;const a=filtered();$('summary').textContent=`Zobrazené ${a.length} z ${arr().length} výsledkov v tejto sekcii.`;
+  $('cards').innerHTML=a.slice(0,12).map(x=>`<div class="card"><div class="score">${Math.round(score(x))}/100</div><div class="title">${esc(x.title||x.brand||'Bez názvu')}</div><div class="price">${money(x.price_eur)}</div><div class="meta">${active!=='chainsaws'?`<span class="chip">${nfmt(x.mileage_km)} km</span>`:''}<span class="chip">👁 ${nfmt(x.views)}</span><span class="chip">${esc(sourceNames[x.source]||x.source||'')}</span>${x.year?`<span class="chip">${x.year}</span>`:''}</div><div class="reason">${esc(reason(x)).slice(0,330)}</div><div class="row"><span class="dim">${active==='deals'&&x.discount_pct?Math.round(x.discount_pct)+' % pod trhom':''}</span>${x.url?`<a class="btn" target="_blank" rel="noopener" href="${esc(x.url)}">Otvoriť inzerát ↗</a>`:''}</div></div>`).join('')||'<div class="empty">Nič neprešlo aktuálnymi filtrami. Pri tejto appke je to v poriadku — radšej nič ako balast.</div>';
+  const saw=active==='chainsaws';$('thead').innerHTML=saw?'<tr><th>Skóre</th><th>Názov</th><th>Cena</th><th>Značka</th><th>Videnia</th><th>Odhad opravy</th><th>Riziko</th><th>Zdroj</th><th></th></tr>':'<tr><th>Skóre</th><th>Názov</th><th>Cena</th><th>Trh</th><th>Pod trhom</th><th>Rok</th><th>km</th><th>Videnia</th><th>Motor</th><th>Zdroj</th><th></th></tr>';
+  $('tbody').innerHTML=a.slice(0,400).map(x=>saw?`<tr><td><b>${Math.round(score(x))}</b></td><td>${esc(x.title)}</td><td>${money(x.price_eur)}</td><td>${esc(x.brand||'—')}</td><td>${nfmt(x.views)}</td><td>${money(x.repair_estimate_min_eur)} – ${money(x.repair_estimate_max_eur)}</td><td>${esc(x.repair_risk||'—')}</td><td>${esc(sourceNames[x.source]||x.source||'')}</td><td>${x.url?`<a target="_blank" href="${esc(x.url)}">otvoriť</a>`:''}</td></tr>`:`<tr><td><b>${Math.round(score(x))}</b></td><td>${esc(x.title)}</td><td>${money(x.price_eur)}</td><td>${money(x.market_price_eur)}</td><td>${x.discount_pct==null?'—':Number(x.discount_pct).toFixed(1)+' %'}</td><td>${x.year||'—'}</td><td>${nfmt(x.mileage_km)}</td><td>${nfmt(x.views)}</td><td>${esc(x.engine_signature||'—')}</td><td>${esc(sourceNames[x.source]||x.source||'')}</td><td>${x.url?`<a target="_blank" href="${esc(x.url)}">otvoriť</a>`:''}</td></tr>`).join('');
+}
+function rebuildSource(){const vals=[...new Set(arr().map(x=>x.source).filter(Boolean))].sort();const old=$('source').value;$('source').innerHTML='<option value="">Všetky</option>'+vals.map(v=>`<option value="${esc(v)}">${esc(sourceNames[v]||v)}</option>`).join('');if(vals.includes(old))$('source').value=old;document.querySelectorAll('.carOnly').forEach(e=>e.style.display=active==='chainsaws'?'none':'block')}
+function status(){const runs=DATA.source_runs||[];$('statusGrid').innerHTML=runs.map(r=>`<div class="source"><b>${esc(sourceNames[r.source]||r.source)}</b><div class="${r.error?'bad':'ok'}">${r.error?'⚠ '+esc(r.error):'✓ OK · '+(r.saved??0)+' uložených'}</div><div class="dim">${when(r.run_at)}</div></div>`).join('')||'<div class="dim">Zatiaľ bez záznamu zo scanu.</div>'}
+async function boot(){try{const r=await fetch('data/results.json?'+Date.now());DATA=await r.json();$('updated').textContent=DATA.generated_at?'Dáta: '+when(DATA.generated_at):'Zatiaľ bez prvého scanu';$('kCars').textContent=nfmt(DATA.counts?.cars_in_db);$('kDeals').textContent=nfmt(DATA.counts?.deals);$('kWow').textContent=nfmt(DATA.counts?.wow);$('kRepair').textContent=nfmt(DATA.counts?.repairs);$('kSaw').textContent=nfmt(DATA.counts?.chainsaws);rebuildSource();status();render()}catch(e){$('updated').textContent='Chyba načítania dát';$('cards').innerHTML='<div class="warn">Nepodarilo sa načítať data/results.json.</div>'}}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');active=b.dataset.tab;rebuildSource();render()});['q','source','pmin','pmax','kmmin','kmmax','vmax'].forEach(id=>$(id).addEventListener('input',render));boot();
+</script>
+</body>
+</html>

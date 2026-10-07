@@ -1,0 +1,90 @@
+{
+  "scan_interval_minutes": 60,
+  "request_delay_seconds": 1.1,
+  "alert_score_min": 82,
+  "ai_candidates_per_scan": 12,
+  "detail_candidates_quick": 50,
+  "detail_candidates_deep": 200,
+  "sources": {
+    "bazos_sk": {
+      "enabled": true,
+      "search_urls": [
+        "https://auto.bazos.sk/"
+      ],
+      "quick_pages": 15,
+      "deep_pages": 120
+    },
+    "bazos_cz": {
+      "enabled": true,
+      "search_urls": [
+        "https://auto.bazos.cz/"
+      ],
+      "quick_pages": 15,
+      "deep_pages": 120
+    },
+    "autobazar_eu": {
+      "enabled": true,
+      "search_urls": [
+        "https://www.autobazar.eu/vysledky/osobne-vozidla/"
+      ],
+      "quick_pages": 10,
+      "deep_pages": 50
+    },
+    "otomoto_pl": {
+      "enabled": true,
+      "search_urls": [
+        "https://www.otomoto.pl/osobowe/uzywane"
+      ],
+      "quick_pages": 10,
+      "deep_pages": 50
+    },
+    "hasznaltauto_hu": {
+      "enabled": true,
+      "search_urls": [
+        "https://www.hasznaltauto.hu/szemelyauto/"
+      ],
+      "quick_pages": 10,
+      "deep_pages": 50
+    },
+    "willhaben_at": {
+      "enabled": true,
+      "search_urls": [
+        "https://www.willhaben.at/iad/gebrauchtwagen/auto/"
+      ],
+      "quick_pages": 10,
+      "deep_pages": 50
+    },
+    "autoscout24_at": {
+      "enabled": false,
+      "search_urls": [
+        "https://www.autoscout24.at/lst"
+      ],
+      "quick_pages": 3,
+      "deep_pages": 10
+    },
+    "mobile_de": {
+      "enabled": false,
+      "country": "DE",
+      "page_size": 100,
+      "quick_pages": 3,
+      "deep_pages": 10,
+      "query": {
+        "classification": "refdata/classes/Car"
+      }
+    }
+  },
+  "chainsaws": {
+    "quick_pages": 8,
+    "deep_pages": 35,
+    "sources": {
+      "chainsaw_bazos_sk": [
+        "https://stroje.bazos.sk/inzeraty/motorova-pila/",
+        "https://dom.bazos.sk/inzeraty/motorova-pila/"
+      ],
+      "chainsaw_bazos_cz": [
+        "https://stroje.bazos.cz/inzeraty/motorova-pila/",
+        "https://dum.bazos.cz/inzeraty/motorova-pila/"
+      ]
+    }
+  }
+}

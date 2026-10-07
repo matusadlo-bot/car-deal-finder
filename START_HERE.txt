@@ -1,0 +1,8 @@
+CAR DEAL FINDER v0.5
+
+1. Spusti setup_windows.bat
+2. Po úspešnej inštalácii spusti run_dashboard.bat
+3. Autá: prvýkrát použi Hlboký scan áut
+4. Píly: majú vlastné okno a vlastný Hlboký scan píl
+
+Táto verzia používa Python 3.14.

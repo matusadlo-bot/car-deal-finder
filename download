@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+cars.db
+last_cloud_scan.json
+.streamlit/secrets.toml
